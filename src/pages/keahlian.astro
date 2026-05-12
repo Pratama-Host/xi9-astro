@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/keahlian.css';
+
+---
+
+<Layout title="TKJ XI-9 - KEAHLIAN">
+  <Header />
+  <main id="main-content">
+    
+      <div class="sec-head">
+        <div class="sec-tag">Kompetensi</div>
+        <h1 class="sec-title">Keahlian Kami</h1>
+        <p class="deskripsi-seksi">
+          Bidang kompetensi teknis yang dikuasai dan terus dikembangkan oleh
+          kelas TKJ XI-9.
+        </p>
+      </div>
+      <div
+        class="skills-list"
+        id="skills-list"
+        aria-label="Daftar keahlian kelas TKJ XI-9"
+      ></div>
+    
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/utama.js';
+    import '../scripts/keahlian.js';
+
+  </script>
+</Layout>

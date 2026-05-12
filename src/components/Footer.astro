@@ -1,0 +1,52 @@
+---
+import G from '../data/G.json';
+
+const { year } = Astro.props;
+
+const platforms = [
+  {
+    key: "instagram",
+    icon: "fa-brands fa-instagram",
+    label: "Instagram",
+  },
+  {
+    key: "youtube",
+    icon: "fa-brands fa-youtube",
+    label: "YouTube",
+  },
+  {
+    key: "tiktok",
+    icon: "fa-brands fa-tiktok",
+    label: "TikTok",
+  },
+];
+
+const socialLinks = platforms.filter(p => G.sosmed[p.key]);
+---
+
+<footer class="kaki-strip wadah" role="contentinfo">
+  <div class="footer-top">
+    <div class="footer-copy">
+      © <span class="footer-year hl">{year || G.tahunAjaran.split('/')[0].trim() || "2026"}</span> TKJ XI-9 · SMK Muhammadiyah Belitang
+    </div>
+    <div class="footer-links">
+      <a href="/tkj">Info TKJ</a>
+      <a href="/pengembang">Tentang</a>
+      <a href="/404">404</a>
+      <a href="/offline">Offline</a>
+    </div>
+  </div>
+  <div class="sosial-kaki" aria-label="Sosial media kami">
+    {socialLinks.map((p) => (
+      <a href={G.sosmed[p.key]} target="_blank" rel="noopener noreferrer" aria-label={`${p.label} TKJ XI-9`}>
+        <i class={p.icon} aria-hidden="true"></i>
+        <span>{p.label}</span>
+      </a>
+    ))}
+  </div>
+  <div style="display: flex; justify-content: flex-end">
+    <button id="replay-intro-tombol" aria-label="Putar ulang intro">
+      <i class="fas fa-rotate-right" aria-hidden="true"></i> Replay Intro
+    </button>
+  </div>
+</footer>

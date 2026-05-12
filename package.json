@@ -1,0 +1,28 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sw.js",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pratama-Host/xi9-mubela.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pratama-Host/xi9-mubela/issues"
+  },
+  "homepage": "https://github.com/Pratama-Host/xi9-mubela#readme",
+  "dependencies": {
+    "astro": "^6.3.1"
+  }
+}

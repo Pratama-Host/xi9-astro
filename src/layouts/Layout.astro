@@ -1,0 +1,107 @@
+---
+import '../styles/dasar.css';
+import '../styles/animasi.css';
+import '../styles/tata-letak.css';
+import '../styles/tombol.css';
+import '../styles/kartu.css';
+import '../styles/avatar.css';
+import '../styles/formulir.css';
+import '../styles/modal.css';
+import GlobalClock from '../components/GlobalClock.astro';
+import OfflineBadge from '../components/OfflineBadge.astro';
+import LogoLightbox from '../components/LogoLightbox.astro';
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="id" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+             script-src 'self' 'unsafe-inline';
+             style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+             font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+             img-src 'self' data: blob: *;
+             media-src 'self' data: blob: *;
+             connect-src 'self';"
+    />
+
+    <!-- SEO -->
+    <title>{title || "TKJ XI-9 - Beranda | SMK Muhammadiyah Belitang"}</title>
+    <meta
+      name="description"
+      content={description || "TKJ XI-9 - Beranda | Teknik Komputer Jaringan SMK Muhammadiyah Belitang. Solid, Kreatif, dan Berdedikasi Tanpa Batas dalam menguasai teknologi digital."}
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/others/manifest.json" />
+    <meta name="theme-color" content="#0f0a0a" />
+
+    <!-- Favicon (inline SVG) -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23b91c1c'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-weight='700' font-size='13' fill='white'>TKJ</text></svg>"
+    />
+
+    <!-- Fonts Preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Rajdhani:wght@500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Rajdhani:wght@500;700&display=swap"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Rajdhani:wght@500;700&display=swap"
+      />
+    </noscript>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <canvas id="kanvas-jaringan"></canvas>
+    <iframe id="bingkai-audio" src="/audio-player.html" style="display: none" aria-hidden="true" allow="autoplay"></iframe>
+    
+    <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+    <div id="progres-halaman" aria-hidden="true"></div>
+    <div id="progres-gulir" aria-hidden="true"></div>
+
+    <slot />
+
+    <button id="back-to-top" aria-label="Kembali ke atas">
+      <i class="fas fa-chevron-up" aria-hidden="true"></i>
+    </button>
+
+    <GlobalClock />
+    <OfflineBadge />
+    <LogoLightbox />
+
+    <!-- Client-side Scripts -->
+    <script>
+      // Load global initialization script
+      import '../scripts/utama.js';
+    </script>
+  </body>
+</html>
