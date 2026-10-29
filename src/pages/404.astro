@@ -1,0 +1,342 @@
+---
+// 404.astro — TKJ XI-9 | Halaman Tidak Ditemukan
+// Menggantikan public/404.html dengan komponen Astro yang menggunakan Layout
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — Halaman Tidak Ditemukan | TKJ XI-9" description="Halaman yang kamu cari tidak ditemukan. Sistem mengalihkan kembali ke beranda TKJ XI-9 SMK Muhammadiyah Belitang.">
+  <!-- Overlay & grid efek retro -->
+  <div class="nf-overlay" aria-hidden="true"></div>
+  <div class="nf-grid" aria-hidden="true"></div>
+
+  <main class="nf-container" id="main-content">
+    <div class="nf-code" aria-label="404">
+      404
+      <span aria-hidden="true">404</span>
+      <span aria-hidden="true">404</span>
+    </div>
+
+    <h1 class="nf-title">OBJECT NOT FOUND</h1>
+    <p class="nf-desc">
+      Rute yang Anda cari berada di luar jangkauan sistem kami.
+      Mungkin URL telah dipindahkan atau dihapus secara permanen.
+    </p>
+
+    <div class="nf-terminal" id="terminal">
+      <span class="terminal-line"><span class="terminal-prompt">$</span> GET <span id="current-path">/page-not-found</span></span>
+      <span class="terminal-line terminal-error">ERROR 404: RESOURCE_UNDEFINED</span>
+      <span class="terminal-line"><span class="terminal-prompt">$</span> pinging gateway.tkj_xi9...</span>
+    </div>
+
+    <div class="nf-actions">
+      <a href="/" class="tombol tombol-utama">
+        <i class="fas fa-house" aria-hidden="true"></i> Beranda Sistem
+      </a>
+      <a href="/anggota" class="tombol tombol-garis">
+        <i class="fas fa-users" aria-hidden="true"></i> Database Anggota
+      </a>
+    </div>
+
+    <div class="nf-countdown-wrap" id="countdown-wrap">
+      <div class="nf-progress-bar">
+        <div class="nf-progress-fill" id="progress-fill"></div>
+      </div>
+      <div>Mengalihkan otomatis dalam <span id="timer" class="hl">10</span> detik...</div>
+      <button class="nf-cancel-btn" id="cancel-timer">Batalkan Pengalihan</button>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --glitch-dur: 4s;
+  }
+
+  /* Full-page layout */
+  :global(body) {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Retro Overlay Effects */
+  .nf-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background:
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 4px, 3px 100%;
+    opacity: 0.15;
+  }
+
+  .nf-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    opacity: 0.3;
+    z-index: 0;
+    animation: gridMove 60s linear infinite;
+  }
+
+  @keyframes gridMove {
+    from { background-position: 0 0; }
+    to { background-position: 500px 500px; }
+  }
+
+  /* 404 Content Container */
+  .nf-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  /* Glitch Title */
+  .nf-code {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(6rem, 25vw, 12rem);
+    font-weight: 700;
+    line-height: 0.8;
+    color: var(--text-1);
+    position: relative;
+    margin-bottom: 1rem;
+    text-shadow: 0.05em 0 0 var(--accent), -0.025em -0.05em 0 var(--accent-2),
+                 0.025em 0.05em 0 #00ffff;
+    animation: glitch 1s infinite;
+  }
+
+  .nf-code span {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .nf-code span:first-child {
+    animation: glitch 650ms infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-0.025em, -0.0125em);
+    opacity: 0.8;
+  }
+
+  .nf-code span:last-child {
+    animation: glitch 375ms infinite;
+    clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+    transform: translate(0.0125em, 0.025em);
+    opacity: 0.8;
+  }
+
+  @keyframes glitch {
+    0%   { text-shadow: 0.05em 0 0 var(--accent), -0.05em -0.025em 0 var(--accent-2), -0.025em 0.05em 0 #00ffff; }
+    14%  { text-shadow: 0.05em 0 0 var(--accent), -0.05em -0.025em 0 var(--accent-2), -0.025em 0.05em 0 #00ffff; }
+    15%  { text-shadow: -0.05em -0.025em 0 var(--accent), 0.025em 0.025em 0 var(--accent-2), -0.05em -0.05em 0 #00ffff; }
+    49%  { text-shadow: -0.05em -0.025em 0 var(--accent), 0.025em 0.025em 0 var(--accent-2), -0.05em -0.05em 0 #00ffff; }
+    50%  { text-shadow: 0.025em 0.05em 0 var(--accent), 0.05em 0 0 var(--accent-2), 0 -0.05em 0 #00ffff; }
+    99%  { text-shadow: 0.025em 0.05em 0 var(--accent), 0.05em 0 0 var(--accent-2), 0 -0.05em 0 #00ffff; }
+    100% { text-shadow: -0.025em 0 0 var(--accent), -0.025em -0.025em 0 var(--accent-2), -0.025em -0.05em 0 #00ffff; }
+  }
+
+  .nf-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .nf-desc {
+    font-size: var(--text-base);
+    color: var(--text-2);
+    max-width: 500px;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  /* Terminal Box */
+  .nf-terminal {
+    background: var(--bg-2);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xs);
+    padding: 1rem;
+    width: 100%;
+    max-width: 500px;
+    text-align: left;
+    font-family: 'Fira Code', monospace;
+    font-size: var(--text-xs);
+    color: var(--text-3);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+
+  .nf-terminal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent);
+    opacity: 0.5;
+    border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  }
+
+  .terminal-line {
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  .terminal-prompt { color: var(--accent); font-weight: bold; }
+  .terminal-error  { color: #f87171; }
+  .terminal-success { color: #4ade80; }
+
+  /* Actions */
+  .nf-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Countdown */
+  .nf-countdown-wrap {
+    margin-top: 2.5rem;
+    font-family: 'Fira Code', monospace;
+    font-size: var(--text-xs);
+    color: var(--text-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nf-progress-bar {
+    width: 200px;
+    height: 4px;
+    background: var(--bg-3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .nf-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 100%;
+    transform-origin: left;
+    transition: transform 1s linear;
+  }
+
+  .nf-cancel-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: var(--radius-xs);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--trans);
+    cursor: pointer;
+    color: var(--text-2);
+  }
+
+  .nf-cancel-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .nf-code { font-size: 5rem; }
+    .nf-terminal { max-width: 90vw; }
+  }
+</style>
+
+<script is:inline>
+  // Tampilkan path URL saat ini di terminal
+  const pathEl = document.getElementById('current-path');
+  if (pathEl) pathEl.textContent = window.location.pathname;
+
+  // Terminal typing animation
+  function typeText(el, text, speed) {
+    if (!el) return;
+    el.textContent = '';
+    let i = 0;
+    const t = setInterval(function() {
+      el.textContent += text.charAt(i++);
+      if (i >= text.length) {
+        clearInterval(t);
+        el.classList.remove('typing');
+      }
+    }, (speed || 30) + Math.floor(Math.random() * 20));
+  }
+
+  async function runTerminal() {
+    const terminal = document.getElementById('terminal');
+    if (!terminal) return;
+
+    const lines = [
+      { text: '64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.041 ms', cls: '' },
+      { text: '64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.038 ms', cls: '' },
+      { text: 'RECOVERY_INITIATED: redirecting to node/HOME', cls: 'terminal-success' }
+    ];
+
+    for (const line of lines) {
+      await new Promise(function(r) { setTimeout(r, 1200); });
+      const span = document.createElement('span');
+      span.className = 'terminal-line ' + line.cls;
+      terminal.appendChild(span);
+      typeText(span, line.text, 20);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  }
+
+  function initCountdown() {
+    const timerEl = document.getElementById('timer');
+    const progressFill = document.getElementById('progress-fill');
+    const cancelBtn = document.getElementById('cancel-timer');
+    const countdownWrap = document.getElementById('countdown-wrap');
+
+    if (!timerEl || !progressFill) return;
+
+    let timeLeft = 10;
+    let isCancelled = false;
+
+    const interval = setInterval(function() {
+      if (isCancelled) return;
+      timeLeft--;
+      timerEl.textContent = timeLeft;
+      progressFill.style.transform = 'scaleX(' + (timeLeft / 10) + ')';
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        window.location.href = '/';
+      }
+    }, 1000);
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', function() {
+        isCancelled = true;
+        if (countdownWrap) countdownWrap.style.opacity = '0.5';
+        cancelBtn.textContent = 'Pengalihan Dibatalkan';
+        cancelBtn.disabled = true;
+        progressFill.style.background = 'var(--text-3)';
+      });
+    }
+  }
+
+  window.addEventListener('load', function() {
+    runTerminal();
+    initCountdown();
+  });
+</script>

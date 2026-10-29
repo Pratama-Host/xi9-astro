@@ -1,0 +1,250 @@
+/* ================================================================
+   halaman/struktur/gaya.css — TKJ XI-9 | Structure Page
+   AESTHETICS: Premium, Dynamic, Platform-Native
+   ================================================================ */
+
+/* ── LAYOUT & WRAPPER ─────────────────────────────────────────── */
+.org-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 40px 0;
+  overflow-x: auto;
+  min-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.org-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 40px);
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  width: 100%;
+}
+
+/* ── ORGANIZATION CARD ────────────────────────────────────────── */
+.org-card {
+  width: clamp(150px, 40vw, 190px);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--surface);
+  border-radius: var(--radius-m);
+  border-left: 3px solid var(--accent) !important; /* Visual indicator */
+  transition: all 0.4s var(--ease-spring);
+  position: relative;
+  overflow: visible !important;
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+/* SNAKE BORDER ANIMATION (Premium Element) */
+.org-card::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  padding: 3px;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(
+        90deg,
+        var(--accent) 0%,
+        var(--accent-2) 33%,
+        var(--accent) 66%,
+        var(--accent-2) 100%
+      )
+      border-box;
+  background-size: auto, 200% 100%;
+  background-position: 0 0, 0% 0%;
+  animation: snakeBorderSlide 10s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+  border: 3px solid transparent;
+  will-change: background-position;
+}
+
+.org-card.is-wali {
+  width: clamp(200px, 50vw, 240px);
+  background: linear-gradient(to bottom, var(--surface), var(--bg-2));
+}
+
+.org-card.is-wali::before {
+  background: linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(
+        90deg,
+        var(--accent-2) 0%,
+        var(--accent) 25%,
+        var(--accent-2) 50%,
+        var(--accent) 75%,
+        var(--accent-2) 100%
+      )
+      border-box;
+  background-size: auto, 200% 100%;
+}
+
+@keyframes snakeBorderSlide {
+  0% { background-position: 0 0, 0% 0%; }
+  100% { background-position: 0 0, 200% 0%; }
+}
+
+@media (hover: hover) {
+  .org-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.25);
+    z-index: 10;
+  }
+}
+
+/* ── CARD CONTENT ────────────────────────────────────────────── */
+.org-card-name {
+  position: relative;
+  z-index: 2;
+  margin-top: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.org-card-pos {
+  position: relative;
+  z-index: 2;
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-family: "Fira Code", monospace;
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: 20px;
+  padding: 3px 12px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+[data-theme="light"] .org-card-pos {
+  background: rgba(var(--accent-rgb), 0.05);
+  border-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.org-card .avatar {
+  margin-bottom: 4px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* ── CONNECTOR & HIERARCHY ───────────────────────────────────── */
+.org-connector {
+  width: 2px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent), var(--border-mid));
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.org-connector::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--glow);
+}
+
+/* ── REVEAL ANIMATIONS ────────────────────────────────────────── */
+.org-card.reveal {
+  animation: cardSlideInScale 0.6s var(--ease-out) backwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes cardSlideInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── RESPONSIVE TWEAKS ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .org-row {
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .org-card {
+    width: 140px;
+    padding: 16px 10px;
+  }
+  .org-card.is-wali {
+    width: 180px;
+  }
+  .org-card-name {
+    font-size: 0.85rem;
+  }
+  .org-card-pos {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+  .org-connector {
+    height: 30px;
+  }
+}
+
+/* ── EXTENDED DATA (PROFIL & SOSMED) ────────────────────────── */
+.org-card-desc {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  margin-top: 12px;
+  line-height: 1.4;
+  opacity: 0.85;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  transition: opacity var(--trans);
+}
+
+.org-card:hover .org-card-desc {
+  opacity: 1;
+}
+
+.org-card-social {
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.org-card-social a {
+  color: var(--text-3);
+  font-size: 1.15rem;
+  transition: color var(--trans), transform var(--trans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.org-card-social a:hover {
+  color: var(--accent);
+  transform: translateY(-2px) scale(1.1);
+}
+

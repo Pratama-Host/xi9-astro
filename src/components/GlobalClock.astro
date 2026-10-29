@@ -1,0 +1,61 @@
+---
+---
+<div id="global-clock" role="status" aria-live="polite" title="Drag to move | Double-click to reset"></div>
+
+<script>
+  const el = document.getElementById('global-clock');
+  if (el) {
+    function fmt(d) {
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+    function update() {
+      el.textContent = fmt(new Date());
+    }
+    update();
+    setInterval(update, 1000);
+
+    const savedPos = localStorage.getItem('tkj-clock-pos');
+    if (savedPos) {
+      try {
+        const pos = JSON.parse(savedPos);
+        el.style.setProperty('left', pos.x + 'px', 'important');
+        el.style.setProperty('top', pos.y + 'px', 'important');
+      } catch {}
+    }
+
+    let isDragging = false, offsetX = 0, offsetY = 0;
+    el.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      isDragging = true;
+      const rect = el.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      el.setPointerCapture(e.pointerId);
+      el.classList.add('dragging');
+      el.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      el.style.setProperty('left', Math.max(0, Math.min(e.clientX - offsetX, window.innerWidth - el.offsetWidth)) + 'px', 'important');
+      el.style.setProperty('top', Math.max(56, Math.min(e.clientY - offsetY, window.innerHeight - 60)) + 'px', 'important');
+    });
+
+    document.addEventListener('pointerup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      el.classList.remove('dragging');
+      el.style.cursor = 'move';
+      try { el.releasePointerCapture(e.pointerId); } catch {}
+      const l = getComputedStyle(el).left, t = getComputedStyle(el).top;
+      localStorage.setItem('tkj-clock-pos', JSON.stringify({ x: parseInt(l), y: parseInt(t) }));
+    });
+
+    el.addEventListener('dblclick', () => {
+      el.style.setProperty('left', '12px', 'important');
+      el.style.setProperty('top', '12px', 'important');
+      localStorage.removeItem('tkj-clock-pos');
+    });
+  }
+</script>

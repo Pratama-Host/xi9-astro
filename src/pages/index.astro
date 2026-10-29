@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Intro from '../components/Intro.astro';
+import Footer from '../components/Footer.astro';
+import G from '../data/G.json';
+
+// Utility functions for pre-rendering
+function makeInitials(name = "") {
+  return name.split(" ").slice(0, 2).map(w => w[0]?.toUpperCase() || "").join("");
+}
+
+const stats = G.stats || [];
+const guru = G.guru || [];
+
+import '../styles/beranda.css';
+---
+
+<Layout title="TKJ XI-9 - Beranda | SMK Muhammadiyah Belitang">
+  <Intro />
+  <Header />
+
+  <main id="main-content">
+    <section class="hero" aria-label="Selamat datang di TKJ XI-9">
+      <div class="hero-noise" aria-hidden="true"></div>
+      <div class="hero-floats" aria-hidden="true">
+        <div class="float-icon fi1"><i class="fas fa-network-wired"></i></div>
+        <div class="float-icon fi2"><i class="fas fa-code"></i></div>
+        <div class="float-icon fi3"><i class="fas fa-shield-halved"></i></div>
+        <div class="float-icon fi4"><i class="fas fa-microchip"></i></div>
+        <div class="float-icon fi5"><i class="fas fa-terminal"></i></div>
+        <div class="float-icon fi6"><i class="fas fa-server"></i></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Teknik Komputer &amp; Jaringan</div>
+        <h1 class="hero-title">
+          SMK <span class="hl glitch-text" data-text='MUBELA'>MUBELA</span><br />XI-9 TKJ.
+        </h1>
+        <p
+          class="hero-desc"
+          id="slogan-pahlawan"
+          aria-live="polite"
+        >
+          {G.sloganHero}
+        </p>
+        <div class="hero-cta">
+          <a href="/pengembang" class="tombol tombol-utama"
+            >Kenali Kami <i class="fas fa-arrow-right" aria-hidden="true"></i
+          ></a>
+          <a href="/anggota" class="tombol tombol-garis">Lihat Anggota</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <section class="stats-section reveal" aria-label="Statistik kelas">
+      <div class="wadah">
+        <div id="strip-statistik" class="strip-statistik">
+          {stats.map((s) => (
+            <div class="stat-cell reveal">
+              <div class="stat-num" data-target={s.angka} data-suffix={s.suffix || ""}>
+                0{s.suffix || ""}
+              </div>
+              <div class="stat-lbl">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Guru Section -->
+    <section id="guru-section" class="wadah reveal" aria-label="Tim Pengajar TKJ XI-9">
+      <div class="sec-header">
+        <div class="sec-tag">Tim Pengajar</div>
+        <h2 class="sec-title">Arsitek Kompetensi Kami</h2>
+      </div>
+      <div class="grid-guru">
+        {guru.map((g, i) => (
+          <div class="card guru-card card-accent-top reveal" style={`--d: ${i * 0.08}s`}>
+            <div class="avatar lg avatar-ring" style="margin:0 auto 14px">
+              {g.foto ? (
+                <img src={g.foto} alt={g.nama} loading="lazy" />
+              ) : (
+                <span>{makeInitials(g.nama)}</span>
+              )}
+            </div>
+            <div style="text-align:center;margin-bottom:8px">
+              <div style="font-weight:700;font-size:var(--text-md);color:var(--text-1)">{g.nama}</div>
+              <span class="chip" style="margin-top:4px">{g.mapel}</span>
+            </div>
+            <div class="guru-role">{g.peran}</div>
+            <blockquote class="guru-quote">{g.quote}</blockquote>
+            <div class="guru-power-label">// POWER LEVEL</div>
+            <div class="guru-bars">
+              {(g.expertise || []).map((e) => (
+                <div class="guru-bar-item">
+                  <div class="guru-bar-meta">
+                    <span>{e.label}</span>
+                    <span>{e.level}%</span>
+                  </div>
+                  <div class="bar-bg">
+                    <div class="bar-fill" data-level={e.level} style="width: 0%"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script>
+    import '../scripts/beranda.js';
+  </script>
+</Layout>

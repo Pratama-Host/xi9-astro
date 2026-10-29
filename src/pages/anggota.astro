@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import G from '../data/G.json';
+
+function makeInitials(name = "") {
+  return name.split(" ").slice(0, 2).map(w => w[0]?.toUpperCase() || "").join("");
+}
+
+const siswa = G.namaSiswa || [];
+const totalSiswa = siswa.length;
+
+import '../styles/anggota.css';
+---
+
+<Layout
+  title="Daftar Anggota Kelas XI-9 TKJ — SMK Muhammadiyah Belitang"
+  description="Daftar lengkap seluruh siswa-siswi kelas TKJ XI-9 SMK Muhammadiyah Belitang beserta NIS, profil, dan informasi keanggotaan."
+>
+  <Header />
+  <main id="main-content" class="halaman-anggota">
+    
+      <div class="sec-head reveal">
+        <div class="sec-tag">Keluarga Besar</div>
+        <h1 class="sec-title">Anggota Kelas</h1>
+        <p class="deskripsi-seksi">
+          Daftar lengkap seluruh siswa-siswi kelas TKJ XI-9. Tekan
+          <kbd
+            style="
+              font-family: monospace;
+              padding: 2px 6px;
+              border: 1px solid var(--border-mid);
+              border-radius: 4px;
+            "
+            >/</kbd
+          >
+          untuk mencari.
+        </p>
+      </div>
+
+      <!-- Search -->
+      <div class="bungkus-pencarian reveal" role="search">
+        <label for="member-search" class="sr-only">Cari anggota</label>
+        <div class="bilah-pencarian">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input
+            type="search"
+            id="member-search"
+            placeholder="Cari nama anggota..."
+            autocomplete="off"
+            aria-label="Cari anggota"
+            aria-controls="members-grid"
+            spellcheck="false"
+          />
+          <button
+            class="hapus-pencarian"
+            id="hapus-pencarian"
+            aria-label="Hapus pencarian"
+            type="button"
+          >
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="members-count mono" id="member-count" aria-live="polite" aria-atomic="true">
+        Semua {totalSiswa} anggota
+      </div>
+      <div class="members-slider-container">
+        <button class="members-prev" aria-label="Anggota sebelumnya">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="members-grid" id="members-grid" aria-label="Daftar anggota kelas">
+          {siswa.map((member, i) => {
+             let jabatanText = "Anggota";
+             const orgMember = G.strukturOrg?.find(s => s.nama === member.nama);
+             if (orgMember && orgMember.jabatan) {
+               jabatanText = orgMember.jabatan;
+             }
+             return (
+               <div class="card member-card card-accent-top reveal" data-nis={member.nis} style={`--d: ${(i % 5) * 0.05}s`} role="button" tabindex="0" aria-label={`Lihat detail ${member.nama}`}>
+                  <div class="avatar lg avatar-ring">
+                    {member.foto ? (
+                      <img src={member.foto} alt={member.nama} loading="lazy" />
+                    ) : (
+                      <span>{makeInitials(member.nama)}</span>
+                    )}
+                  </div>
+                  <div class="member-card-name">{member.nama}</div>
+                  <div class="member-card-role" style="font-size: 0.75rem; color: var(--text-2); margin-bottom: 8px;">{jabatanText}</div>
+                  <div class="member-card-nis mono">{member.nis}</div>
+               </div>
+             )
+          })}
+        </div>
+        <button class="members-next" aria-label="Anggota berikutnya">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Member Modal -->
+      <div id="member-modal" class="member-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Detail anggota">
+        <div class="member-modal-content card">
+          <button id="member-modal-tutup" class="member-modal-tutup" aria-label="Tutup detail">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </button>
+          
+          <div class="member-modal-header">
+            <div id="modal-avatar" class="avatar lg avatar-ring" title="Klik untuk melihat foto asli"></div>
+            <div class="member-modal-id">
+              <h2 id="modal-name" class="modal-name"></h2>
+              <div id="modal-role" class="modal-role chip"></div>
+              <div id="modal-nis" class="modal-nis mono"></div>
+            </div>
+          </div>
+
+          <div class="member-modal-body">
+            <p id="modal-desc" class="modal-desc"></p>
+            
+            <div class="modal-section">
+              <h3 class="modal-section-title">Media Sosial</h3>
+              <div id="modal-social" class="modal-social"></div>
+            </div>
+
+            <div id="modal-audio" class="modal-audio"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo Lightbox -->
+      <div id="member-photo-lightbox" class="foto-jendela" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Foto profil diperbesar">
+        <button id="member-photo-lightbox-tutup" class="tutup-foto-jendela" aria-label="Tutup foto">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+        <img id="member-photo-lightbox-img" src="" alt="Foto profil" class="foto-jendela-img" />
+      </div>
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/anggota.js';
+  </script>
+</Layout>

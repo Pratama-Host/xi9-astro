@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import G from '../data/G.json';
+import '../styles/keahlian.css';
+
+const skills = G.skills || [];
+
+function getLevelClass(level: number) {
+  if (level >= 85) return 'expert';
+  if (level >= 70) return 'advanced';
+  return 'intermediate';
+}
+function getLevelText(level: number) {
+  if (level >= 85) return 'Expert';
+  if (level >= 70) return 'Advanced';
+  return 'Intermediate';
+}
+---
+
+<Layout
+  title="Kompetensi & Keahlian Siswa TKJ XI-9 — SMK Muhammadiyah Belitang"
+  description="Bidang keahlian teknis jaringan komputer, server Linux, pemrograman web, dan keamanan siber yang dikuasai siswa TKJ XI-9."
+>
+  <Header />
+  <main id="main-content">
+    
+      <div class="sec-head">
+        <div class="sec-tag">Kompetensi</div>
+        <h1 class="sec-title">Keahlian Kami</h1>
+        <p class="deskripsi-seksi">
+          Bidang kompetensi teknis yang dikuasai dan terus dikembangkan oleh
+          kelas TKJ XI-9.
+        </p>
+      </div>
+      <div
+        class="skills-list"
+        id="skills-list"
+        aria-label="Daftar keahlian kelas TKJ XI-9"
+      >
+        {skills.map((skill, idx) => (
+          <div class="skill-card reveal" style={`--d: ${(idx % 4) * 0.1}s`} data-level="0">
+            <div class="skill-top">
+              <div style="font-size:1.5rem;color:var(--primary);width:40px;text-align:center;">
+                <i class={skill.icon} aria-hidden="true"></i>
+              </div>
+              <div class="skill-info">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                  <h3 class="skill-name">{skill.nama}</h3>
+                  <span class={`skill-level-tag ${getLevelClass(skill.level)}`}>{getLevelText(skill.level)}</span>
+                </div>
+                <p class="skill-desc">{skill.desc}</p>
+              </div>
+              <div class="skill-pct" data-target={skill.level}>0%</div>
+            </div>
+            <div class="bar-bg">
+              <div class="bar-fill" data-width={`${skill.level}%`} style="width:0%"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/keahlian.js';
+  </script>
+</Layout>

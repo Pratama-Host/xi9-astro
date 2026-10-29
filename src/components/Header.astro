@@ -1,0 +1,30 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import CanvasToggle from './CanvasToggle.astro';
+import AudioToggle from './AudioToggle.astro';
+import HamburgerMenu from './HamburgerMenu.astro';
+---
+
+<header class="bilah-atas" role="banner">
+  <div class="brand-bilah-atas">
+    <img
+      id="brand-logo"
+      src="/assets/logo/logo-utama.svg"
+      alt="Logo TKJ XI-9"
+      class="brand-badge brand-logo"
+      role="button"
+      tabindex="0"
+      aria-label="Klik untuk memperbesar logo"
+    />
+    <div>
+      <div class="brand-name">TKJ XI-9</div>
+      <div class="brand-year mono">2026/2027</div>
+    </div>
+  </div>
+  <div class="aksi-bilah-atas">
+    <ThemeToggle />
+    <CanvasToggle />
+    <AudioToggle />
+    <HamburgerMenu />
+  </div>
+</header>
