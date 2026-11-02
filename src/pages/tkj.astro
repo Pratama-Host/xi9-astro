@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSiteData, getSections } from '../lib/data';
+import '../styles/tkj.css';
+const G = await getSiteData();
+const sectionConfig = await getSections('/tkj');
+const sectionVisible = (key) => sectionConfig.find((item) => item.section_key === key)?.enabled !== false;
+const sectionOrder = (key, fallback) => sectionConfig.find((item) => item.section_key === key)?.sort_order ?? fallback;
+const pageContent = await import('../lib/data').then((m) => m.getPageContent('/tkj'));
+
+const cmsTkjHeadline = pageContent.headline || "Apa Itu TKJ?";
+const cmsTkjSubjectsTitle = pageContent.subjectsTitle || "Mata Pelajaran";
+const cmsTkjCurriculumTitle = pageContent.curriculumTitle || "Alur Kurikulum";
+const cmsTkjCareersTitle = pageContent.careersTitle || "Prospek Karir";
+const tkj = G.tkj;
+---
+
+<Layout
+  title="Jurusan Teknik Komputer & Jaringan — TKJ XI-9 SMK Muhammadiyah Belitang"
+  description="Informasi program keahlian TKJ, mata pelajaran, alur kurikulum, prospek karir lulusan, dan alat bantu Subnet Calculator online."
+>
+  <Header />
+  <main id="main-content">
+    
+      <!-- Hero TKJ -->
+      <div class="tkj-hero reveal" style={`--d:0s;order:${sectionOrder("overview",0)};display:${sectionVisible("overview") ? "" : "none"}`} >
+        <div class="sec-tag" style="margin-bottom: 12px">Jurusan</div>
+        <h1>{cmsTkjHeadline}</h1>
+        <p id="tkj-desc">
+{tkj.deskripsi}
+</p>
+      </div>
+
+      <div class="tkj-grid">
+        <!-- Mata Pelajaran -->
+        <div class="card tkj-card card-accent-top reveal" style={`--d:0.08s;order:${sectionOrder("subjects",1)};display:${sectionVisible("subjects") ? "" : "none"}`} >
+          <div class="icon-box" aria-hidden="true">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h3>{cmsTkjSubjectsTitle}</h3>
+          <div
+            class="mapel-list"
+            id="tkj-mapel"
+            aria-label="Daftar mata pelajaran TKJ"
+          >
+            {tkj.mapel.map(m => (
+              <div class="mapel-item">
+                <i class={`fas ${m.icon || 'fa-circle'}`} aria-hidden="true"></i>
+                <span>{m.nama}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Kurikulum -->
+        <div class="card tkj-card card-accent-top reveal" style={`--d:0.16s;order:${sectionOrder("curriculum",2)};display:${sectionVisible("curriculum") ? "" : "none"}`} >
+          <div class="icon-box" aria-hidden="true">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3>{cmsTkjCurriculumTitle}</h3>
+          <div
+            class="kurikulum-list"
+            id="tkj-kurikulum"
+            aria-label="Alur kurikulum TKJ per kelas"
+          >
+            {tkj.kurikulum.map(k => (
+              <div class="kur-item">
+                <div class="kur-dot" aria-hidden="true"></div>
+                <div>
+                  <h4>{k.fase}</h4>
+                  <p>{k.fokus}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Prospek Karir -->
+        <div
+          class="card tkj-card card-accent-top reveal"
+          style={`grid-column:1/-1;--d:0.24s;order:${sectionOrder("careers",3)};display:${sectionVisible("careers") ? "" : "none"}`}
+        >
+          <div class="icon-box" aria-hidden="true">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <h3>{cmsTkjCareersTitle}</h3>
+          <div
+            class="karir-list"
+            id="tkj-karir"
+            aria-label="Daftar prospek karir lulusan TKJ"
+          >
+            {tkj.karir.map(k => (
+              <div class="karir-item">
+                <div class="karir-icon" aria-hidden="true"><i class={`fas ${k.icon || 'fa-briefcase'}`}></i></div>
+                <div class="karir-info">
+                  <h4>{k.jabatan}</h4>
+                  <p>{k.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TKJ Tools: Subnet Calculator -->
+        <div class="card tkj-card card-accent-top reveal" style={`--d:0.32s;order:${sectionOrder("tools",4)};display:${sectionVisible("tools") ? "" : "none"}`} >
+          <div class="icon-box" aria-hidden="true">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h3>Subnet Calculator</h3>
+          <p class="text-sm">Masukkan IP/CIDR (contoh: 192.168.1.1/24)</p>
+          <div style="display: flex; gap: 8px; margin-top: 8px">
+            <input
+              id="subnet-input"
+              class="input"
+              placeholder="192.168.1.1/24"
+              aria-label="Input IP dan CIDR"
+            />
+            <button id="subnet-calc-tombol" class="tombol">Hitung</button>
+          </div>
+          <div
+            id="subnet-result"
+            style="
+              margin-top: 12px;
+              font-family: &quot;Fira Code&quot;, monospace;
+              font-size: 0.9rem;
+              color: var(--text-2);
+            "
+          ></div>
+        </div>
+
+        <!-- TKJ Tools: Ping Simulator -->
+        <div class="card tkj-card card-accent-top reveal" style={`--d:0.4s;order:${sectionOrder("tools",5)};display:${sectionVisible("tools") ? "" : "none"}`} >
+          <div class="icon-box" aria-hidden="true">
+            <i class="fas fa-broadcast-tower"></i>
+          </div>
+          <h3>Ping Simulator</h3>
+          <p class="text-sm">Simulasi ping visual ke server kelas</p>
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              margin-top: 8px;
+              align-items: center;
+            "
+          >
+            <input
+              id="ping-host"
+              class="input"
+              placeholder="tkj-xi9.smkn1"
+              aria-label="Host untuk diping"
+            />
+            <button id="ping-tombol" class="tombol">Ping</button>
+          </div>
+          <div
+            id="ping-log"
+            style="
+              margin-top: 12px;
+              font-family: &quot;Fira Code&quot;, monospace;
+              font-size: 0.9rem;
+              color: var(--text-2);
+            "
+          ></div>
+        </div>
+      </div>
+    
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/tkj.js';
+  </script>
+</Layout>

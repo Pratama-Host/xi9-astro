@@ -1,0 +1,22 @@
+---
+import { getNavigation } from '../lib/data';
+const items = await getNavigation();
+---
+
+<button id="hamburger-tombol" class="hamburger-tombol" aria-label="Buka menu" aria-expanded="false">
+  <span class="hamburger-icon"><i class="fas fa-bars" aria-hidden="true"></i></span>
+</button>
+
+<nav id="menu-hamburger" aria-hidden="true">
+  <div class="panel-menu-hamburger">
+    <button type="button" class="tutup-menu-hamburger" aria-label="Tutup menu">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+    {items.filter((item) => item.enabled !== false).map((item) => (
+      <a class="tautan-menu-hamburger" href={item.href}>
+        <span><i class={`fas ${item.icon || 'fa-link'}`} aria-hidden="true"></i></span>
+        <span>{item.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>

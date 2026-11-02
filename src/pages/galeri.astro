@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSiteData, getSections } from '../lib/data';
+import '../styles/galeri.css';
+const G = await getSiteData();
+const sectionConfig = await getSections('/galeri');
+const sectionEntry = (key) => sectionConfig.find((item) => item.section_key === key);
+const sectionVisible = (key) => sectionEntry(key)?.enabled !== false;
+const sectionOrder = (key, fallback) => sectionEntry(key)?.sort_order ?? fallback;
+const pageContent = await import('../lib/data').then((m) => m.getPageContent('/galeri'));
+
+const cmsGalleryEyebrow = pageContent.eyebrow || "Momen Bersama";
+const cmsGalleryHeadline = pageContent.headline || "Galeri Kelas";
+const cmsGalleryIntro = pageContent.intro || "Kenangan dan momen berharga bersama keluarga besar TKJ XI-9. Klik foto untuk memperbesar.";
+const cmsFeaturedEyebrow = pageContent.featuredEyebrow || "Sorotan";
+const cmsFeaturedTitle = pageContent.featuredTitle || "Foto Pilihan";
+const cmsCollectionEyebrow = pageContent.collectionEyebrow || "Galeri";
+const cmsCollectionTitle = pageContent.collectionTitle || "Koleksi Foto Kelas";
+const cmsGalleryFooterNote = pageContent.footerNote || "Foto diperbarui oleh admin kelas · Hubungi ketua untuk menambah foto";
+const galeri = G.galeri || [];
+const carouselData = galeri.slice(0, 5);
+
+---
+
+<Layout
+  title="Galeri & Kenangan Kelas XI-9 TKJ — SMK Muhammadiyah Belitang"
+  description="Dokumentasi dan momen berharga kebersamaan keluarga besar kelas TKJ XI-9 SMK Muhammadiyah Belitang."
+>
+  <Header />
+  <main id="main-content" style="display:flex;flex-direction:column">
+      <div class="sec-head" style="order:0">
+        <div class="sec-tag">{cmsGalleryEyebrow}</div>
+        <h1 class="sec-title">{cmsGalleryHeadline}</h1>
+        <p class="deskripsi-seksi">
+          {cmsGalleryIntro}
+        </p>
+      </div>
+
+      {carouselData.length > 0 && (
+        <section class="carousel-3d-wrapper reveal" aria-label="Sorotan Galeri" style={`order:${sectionOrder("featured",1)};display:${sectionVisible("featured") ? "" : "none"}`}>
+          <div class="sec-tag" style="text-align: center;">{cmsFeaturedEyebrow}</div>
+          <h2 class="sec-subtitle" style="text-align: center; margin-bottom: 2rem;">{cmsFeaturedTitle}</h2>
+          <div class="carousel-3d" id="carousel-3d">
+            {carouselData.map((item, idx) => (
+              <div class={`carousel-item ${idx === 0 ? 'active' : ''}`} data-index={idx}>
+                <img src={item.src} alt={item.caption || "Carousel item"} decoding="async" />
+              </div>
+            ))}
+          </div>
+          <div class="carousel-3d-controls">
+            <button class="carousel-3d-prev" id="carousel-3d-prev" aria-label="Foto Sebelumnya">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <div class="carousel-3d-dots" id="carousel-3d-dots" role="tablist">
+              {carouselData.map((_, idx) => (
+                <button class={`carousel-dot ${idx === 0 ? 'active' : ''}`} data-index={idx} aria-label={`Pergi ke slide ${idx + 1}`} aria-selected={idx === 0 ? 'true' : 'false'}></button>
+              ))}
+            </div>
+            <button class="carousel-3d-next" id="carousel-3d-next" aria-label="Foto Berikutnya">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </section>
+      )}
+
+      <section class="gallery-section reveal" style={`margin-top:4rem;order:${sectionOrder("grid",2)};display:${sectionVisible("grid") ? "" : "none"}`}>
+        <div class="sec-tag">{cmsCollectionEyebrow}</div>
+        <h2 class="sec-subtitle">{cmsCollectionTitle}</h2>
+        <div class="grid-galeri" id="grid-galeri" aria-label="Galeri foto kelas TKJ XI-9" role="list">
+          {galeri.map((item, idx) => (
+            <div class="item-galeri reveal" style={`--d: ${(idx % 5) * 0.05}s`} tabindex="0">
+              <img src={item.src} alt={item.caption || "Galeri foto"} loading="lazy" />
+              {item.caption && (
+                <div class="keterangan-galeri">
+                  <span>{item.caption}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <p class="catatan-galeri" style="margin-top: 2rem;">
+        <i class="fas fa-camera" aria-hidden="true"></i>
+        {cmsGalleryFooterNote}
+      </p>
+
+      <!-- Lightbox Galeri -->
+      <div id="jendela-gambar" class="jendela-gambar" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Pratinjau foto galeri">
+        <button id="tutup-jendela" class="tutup-jendela" aria-label="Tutup pratinjau">
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+        <div class="konten-jendela">
+          <img id="lightbox-img" src="" alt="Pratinjau foto" />
+          <div id="lb-caption-bar" class="bilah-keterangan-jendela"></div>
+        </div>
+      </div>
+  </main>
+  <Footer />
+
+  <script>
+    import '../scripts/galeri.js';
+  </script>
+</Layout>

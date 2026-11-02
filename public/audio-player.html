@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Audio Player</title>
+  </head>
+  <body>
+    <audio id="bg-audio" preload="metadata" loop>
+      <!-- Source audio diatur melalui JavaScript setelah konfigurasi dimuat. -->
+
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>
+      const STORAGE_ENABLED = "tkj-audio-enabled";
+      const STORAGE_VOLUME = "tkj-audio-volume";
+      const STORAGE_TIME = "tkj-audio-current-time";
+      const audio = document.getElementById("bg-audio");
+      let configuredDefaultVolume = 0.8;
+      // Audio dipasok dari Supabase. Jika belum tersedia, player tetap diam tanpa 404 aset lokal.
+      fetch("/api/public/settings", { credentials: "same-origin" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((settings) => {
+          const source = settings?.media?.audio_url;
+          if (!source) return;
+          audio.src = source;
+          audio.load();
+          const configuredVolume = Number(settings?.media?.audio_volume);
+          if (Number.isFinite(configuredVolume)) {
+            configuredDefaultVolume = Math.min(1, Math.max(0, configuredVolume));
+            try { if (localStorage.getItem(STORAGE_VOLUME) === null) audio.volume = configuredDefaultVolume; } catch {}
+          }
+          if (getStoredEnabled()) audio.addEventListener("canplay", playAudio, { once: true });
+        })
+        .catch(() => {
+          audio.removeAttribute("src");
+          audio.load();
+        });
+      const FADE_DURATION_SECONDS = 1.5;
+      let fadeAnimationFrame = null;
+      let pendingPlayAfterInteraction = false;
+
+      function getStoredEnabled() {
+        try {
+          return localStorage.getItem(STORAGE_ENABLED) === "1";
+        } catch {
+          return false;
+        }
+      }
+
+      function aturTersimpanAktif(enabled) {
+        try {
+          localStorage.setItem(STORAGE_ENABLED, enabled ? "1" : "0");
+        } catch {}
+      }
+
+      function ambilTersimpanVolume() {
+        try {
+          const stored = parseFloat(localStorage.getItem(STORAGE_VOLUME));
+          if (!Number.isFinite(stored)) return configuredDefaultVolume;
+          return Math.min(1, Math.max(0, stored));
+        } catch {
+          return 0.8;
+        }
+      }
+
+      function aturTersimpanVolume(value) {
+        try {
+          localStorage.setItem(STORAGE_VOLUME, String(value));
+        } catch {}
+      }
+
+      function ambilTersimpanWaktu() {
+        try {
+          const stored = parseFloat(localStorage.getItem(STORAGE_TIME));
+          if (!Number.isFinite(stored) || stored < 0) return 0;
+          return stored;
+        } catch {
+          return 0;
+        }
+      }
+
+      function aturTersimpanWaktu(value) {
+        try {
+          localStorage.setItem(STORAGE_TIME, String(value));
+        } catch {}
+      }
+
+      function fadeVolume(toValue, duration = FADE_DURATION_SECONDS) {
+        if (fadeAnimationFrame) {
+          cancelAnimationFrame(fadeAnimationFrame);
+          fadeAnimationFrame = null;
+        }
+
+        const startValue = audio.volume;
+        const targetValue = Math.min(1, Math.max(0, toValue));
+        const startTime = performance.now();
+        const delta = targetValue - startValue;
+        if (Math.abs(delta) < 0.001 || duration <= 0) {
+          audio.volume = targetValue;
+          return;
+        }
+
+        function step(now) {
+          const progress = Math.min(1, (now - startTime) / (duration * 1000));
+          audio.volume = Math.min(
+            1,
+            Math.max(0, startValue + delta * progress),
+          );
+          if (progress < 1) {
+            fadeAnimationFrame = requestAnimationFrame(step);
+          } else {
+            fadeAnimationFrame = null;
+          }
+        }
+
+        fadeAnimationFrame = requestAnimationFrame(step);
+      }
+
+      function kirimStatusAudio(eventName) {
+        if (!window.parent) return;
+        window.parent.postMessage(
+          {
+            event: eventName || "state",
+            sedangBermain: !audio.paused,
+            currentTime: audio.currentTime,
+            volume: audio.volume,
+          },
+          "*",
+        );
+      }
+
+      function playAudio() {
+        audio
+          .play()
+          .then(() => {
+            aturTersimpanAktif(true);
+            kirimStatusAudio("play");
+          })
+          .catch((error) => {
+            console.error("Audio play failed:", error);
+            if (error.name === "NotAllowedError") {
+              // Autoplay blocked, mark for retry after user interaction
+              pendingPlayAfterInteraction = true;
+              aturTersimpanAktif(true); // Keep preference as enabled
+            }
+            kirimStatusAudio("error");
+          });
+      }
+
+      function pauseAudio() {
+        audio.pause();
+        aturTersimpanAktif(false);
+        kirimStatusAudio("pause");
+      }
+
+      function alihAudio() {
+        if (audio.paused) {
+          playAudio();
+        } else {
+          pauseAudio();
+        }
+      }
+
+      function setVolume(value) {
+        const normalized = Math.min(1, Math.max(0, Number(value) || 0));
+        audio.volume = normalized;
+        aturTersimpanVolume(normalized);
+        kirimStatusAudio("volume");
+      }
+
+      function sendState() {
+        kirimStatusAudio("state");
+      }
+
+      window.addEventListener("message", (messageEvent) => {
+        const data = messageEvent.data;
+        if (!data || typeof data !== "object") return;
+
+        const action = data.action;
+        if (!action) return;
+
+        if (action === "play") {
+          playAudio();
+        } else if (action === "pause") {
+          pauseAudio();
+        } else if (action === "toggle") {
+          alihAudio();
+        } else if (action === "volume") {
+          setVolume(data.value);
+        } else if (action === "getState") {
+          sendState();
+        }
+      });
+
+      audio.addEventListener("play", () => kirimStatusAudio("play"));
+      audio.addEventListener("pause", () => kirimStatusAudio("pause"));
+      audio.addEventListener("volumechange", () => {
+        // Preferensi volume hanya ditulis saat pengguna mengubahnya melalui setVolume().
+        // Dengan begitu volume default CMS tetap dapat diterapkan pada kunjungan pertama.
+        kirimStatusAudio("volume");
+      });
+      audio.addEventListener("timeupdate", () => {
+        if (!audio.paused) {
+          aturTersimpanWaktu(audio.currentTime);
+        }
+      });
+
+      window.addEventListener("pagehide", () => {
+        aturTersimpanWaktu(audio.currentTime);
+        aturTersimpanAktif(!audio.paused);
+      });
+
+      audio.addEventListener("error", (e) => {
+        console.error("Audio element error:", e);
+        kirimStatusAudio("error");
+      });
+
+      audio.addEventListener("loadstart", () =>
+        console.log("Audio load started"),
+      );
+      audio.addEventListener("canplay", () => console.log("Audio can play"));
+      audio.addEventListener("canplaythrough", () =>
+        console.log("Audio can play through"),
+      );
+
+      audio.addEventListener("loadedmetadata", () => {
+        const storedTime = ambilTersimpanWaktu();
+        if (storedTime > 0 && storedTime < audio.duration) {
+          audio.currentTime = storedTime;
+        }
+      });
+
+      window.addEventListener("load", () => {
+        audio.volume = ambilTersimpanVolume();
+        // Pemutaran otomatis menunggu konfigurasi Supabase dan event canplay.
+        // Jika audio belum tersedia, player tetap diam tanpa mencoba sumber lokal.
+        sendState();
+        if (getStoredEnabled() && audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) playAudio();
+      });
+
+      // Handle user interaction to retry pending audio play
+      function handleUserInteraction() {
+        if (pendingPlayAfterInteraction) {
+          console.log("Retrying audio play after user interaction");
+          playAudio();
+          pendingPlayAfterInteraction = false;
+        }
+        // Remove listeners after first interaction
+        document.removeEventListener("click", handleUserInteraction);
+        document.removeEventListener("keydown", handleUserInteraction);
+        document.removeEventListener("touchstart", handleUserInteraction);
+      }
+
+      document.addEventListener("click", handleUserInteraction);
+      document.addEventListener("keydown", handleUserInteraction);
+      document.addEventListener("touchstart", handleUserInteraction);
+    </script>
+  </body>
+</html>
+

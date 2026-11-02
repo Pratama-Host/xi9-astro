@@ -1,0 +1,54 @@
+---
+import { getSettings } from '../lib/data';
+const G = await getSettings();
+
+const { year } = Astro.props;
+const footerYear = year || String(G.tahunAjaran || '2026/2027').split('/')[0].trim() || '2026';
+
+const platforms = [
+  {
+    key: "instagram",
+    icon: "fa-brands fa-instagram",
+    label: "Instagram",
+  },
+  {
+    key: "youtube",
+    icon: "fa-brands fa-youtube",
+    label: "YouTube",
+  },
+  {
+    key: "tiktok",
+    icon: "fa-brands fa-tiktok",
+    label: "TikTok",
+  },
+];
+
+const socialLinks = platforms.filter(p => G.sosmed?.[p.key]);
+const footerLinks = Array.isArray(G.footer?.links) ? G.footer.links.filter((item) => item?.enabled !== false && typeof item.href === 'string' && item.href.startsWith('/') && !item.href.startsWith('//')) : [
+  { href: '/tkj', label: 'Info TKJ' }, { href: '/pengembang', label: 'Tentang' }, { href: '/404', label: '404' }, { href: '/offline', label: 'Offline' },
+];
+---
+
+<footer class="kaki-strip wadah" role="contentinfo">
+  <div class="footer-top">
+    <div class="footer-copy">
+      © <span class="footer-year hl">{footerYear}</span> {G.namaKelas || "XI-9"} · {G.namaSekolah || "SMK Muhammadiyah Belitang"}
+    </div>
+    <div class="footer-links">
+      {footerLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+    </div>
+  </div>
+  <div class="sosial-kaki" aria-label="Sosial media kami">
+    {socialLinks.map((p) => (
+      <a href={G.sosmed[p.key]} target="_blank" rel="noopener noreferrer" aria-label={`${p.label} TKJ XI-9`}>
+        <i class={p.icon} aria-hidden="true"></i>
+        <span>{p.label}</span>
+      </a>
+    ))}
+  </div>
+  <div style="display: flex; justify-content: flex-end">
+    <button id="replay-intro-tombol" aria-label="Putar ulang intro">
+      <i class="fas fa-rotate-right" aria-hidden="true"></i> Replay Intro
+    </button>
+  </div>
+</footer>

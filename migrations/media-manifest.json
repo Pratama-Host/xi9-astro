@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-11-01T13:49:42.414Z",
+  "sourceOfStructuredData": "src/data/G.json",
+  "note": "This manifest is a manual upload checklist. The script does not upload files or connect to Supabase. SQL rows use storage:// references that the server data layer resolves into public Storage URLs.",
+  "summary": {
+    "anggota": 20,
+    "guru": 5,
+    "skills": 6,
+    "galeri": 20,
+    "mediaReferences": 26,
+    "mediaFilesPresent": 26,
+    "mediaFilesMissing": 0
+  },
+  "files": [
+    {
+      "source": "public/assets/profil/alip.webp",
+      "targetBucket": "astro",
+      "targetPath": "anggota/alip.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/profil/cute.webp",
+      "targetBucket": "astro",
+      "targetPath": "anggota/cute.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/profil/profil-alfredo.webp",
+      "targetBucket": "astro",
+      "targetPath": "anggota/profil-alfredo.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json",
+        "src/pages/pengembang.astro"
+      ]
+    },
+    {
+      "source": "public/assets/profil/profil-alvina.webp",
+      "targetBucket": "astro",
+      "targetPath": "anggota/profil-alvina.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/audio/videoplayback.weba",
+      "targetBucket": "astro",
+      "targetPath": "assets-global/audio/videoplayback.weba",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "public/audio-player.html",
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/logo/logo-utama.svg",
+      "targetBucket": "astro",
+      "targetPath": "assets-global/logo/logo-utama.svg",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "public/404.html",
+        "public/offline.html",
+        "public/sw.js",
+        "src/components/Header.astro",
+        "src/components/LogoLightbox.astro",
+        "src/layouts/Layout.astro"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-cewe1.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-cewe1.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-cewe2.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-cewe2.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-kelas1.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-kelas1.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-kelas2.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-kelas2.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-kelas3.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-kelas3.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/foto-lab1.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/foto-lab1.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan1.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan1.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan10.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan10.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan11.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan11.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan12.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan12.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan13.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan13.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan2.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan2.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan4.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan4.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan5.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan5.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan6.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan6.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan7.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan7.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan8.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan8.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/kenangan9.webp",
+      "targetBucket": "astro",
+      "targetPath": "galeri/kenangan9.webp",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/meme.jpeg",
+      "targetBucket": "astro",
+      "targetPath": "galeri/meme.jpeg",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    },
+    {
+      "source": "public/assets/kenangan/meme2.jpeg",
+      "targetBucket": "astro",
+      "targetPath": "galeri/meme2.jpeg",
+      "existsInArchive": true,
+      "status": "ready-to-upload",
+      "referencedIn": [
+        "src/data/G.json"
+      ]
+    }
+  ]
+}

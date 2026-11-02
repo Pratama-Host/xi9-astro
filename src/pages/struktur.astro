@@ -1,0 +1,154 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSiteData, getSections } from '../lib/data';
+import '../styles/struktur.css';
+const G = await getSiteData();
+const sectionConfig = await getSections('/struktur');
+const organizationVisible = sectionConfig.find((item) => item.section_key === 'organization')?.enabled !== false;
+const pageContent = await import('../lib/data').then((m) => m.getPageContent('/struktur'));
+
+const cmsStructureEyebrow = pageContent.eyebrow || "Kepengurusan";
+const cmsStructureHeadline = pageContent.headline || "Struktur Organisasi";
+const cmsStructureIntro = pageContent.intro || `Susunan kepengurusan kelas TKJ XI-9 tahun ajaran ${G.tahunAjaran || "ini"}.`;
+function makeInitials(name = "") {
+  return name.split(" ").slice(0, 2).map(w => w[0]?.toUpperCase() || "").join("");
+}
+
+function getExtendedMemberData(nama) {
+  if (!G.namaSiswa) return null;
+  return G.namaSiswa.find((s) => s.nama.toLowerCase() === nama.toLowerCase()) || null;
+}
+
+---
+
+<Layout
+  title="Struktur Organisasi Kelas XI-9 TKJ — SMK Muhammadiyah Belitang"
+  description="Bagan kepengurusan dan struktur organisasi kelas TKJ XI-9 SMK Muhammadiyah Belitang periode 2026/2027."
+>
+  <Header />
+  <main id="main-content">
+    <div class="wadah">
+      <div class="sec-head reveal">
+        <div class="sec-tag">{cmsStructureEyebrow}</div>
+        <h1 class="sec-title">{cmsStructureHeadline}</h1>
+        <p class="deskripsi-seksi">
+          {cmsStructureIntro}
+        </p>
+      </div>
+
+      <div class="org-wrap reveal" id="org-wrap" aria-label="Bagan struktur organisasi kelas" style={`display:${organizationVisible ? "" : "none"}`} >
+        {/* Row 1: Wali Kelas */}
+        {G.waliKelas && (
+          <div class="org-row">
+            <div class="org-card reveal is-wali" tabindex="0" role="button" data-nama={G.waliKelas.nama} data-jabatan="Wali Kelas" data-foto={G.waliKelas.foto} data-desc={G.waliKelas.desc}>
+              <div class="avatar lg" style="margin-bottom: 8px;">
+                {G.waliKelas.foto ? (
+                  <img src={G.waliKelas.foto} alt={G.waliKelas.nama} loading="lazy" />
+                ) : (
+                  <span>{makeInitials(G.waliKelas.nama)}</span>
+                )}
+              </div>
+              <div class="org-card-name">{G.waliKelas.nama}</div>
+              <div class="org-card-pos">Wali Kelas</div>
+              {G.waliKelas.desc && <div class="org-card-desc">{G.waliKelas.desc}</div>}
+            </div>
+          </div>
+          <div class="org-connector reveal"></div>
+        )}
+
+        {/* Row 2: Ketua & Wakil */}
+        {G.strukturOrg && G.strukturOrg.length >= 2 && (
+          <div class="org-row">
+            {[G.strukturOrg[0], G.strukturOrg[1]].map((m, i) => {
+              const ext = getExtendedMemberData(m.nama);
+              const foto = m.foto || (ext ? ext.foto : "");
+              const desc = m.desc || (ext ? ext.desc : "");
+              return (
+                <div class="org-card reveal" tabindex="0" role="button" data-nama={m.nama} data-jabatan={m.jabatan} data-foto={foto} data-desc={desc} style={`--d: ${(i+1) * 0.15}s`}>
+                   <div class="avatar lg" style="margin-bottom: 8px;">
+                    {foto ? (
+                      <img src={foto} alt={m.nama} loading="lazy" />
+                    ) : (
+                      <span>{makeInitials(m.nama)}</span>
+                    )}
+                  </div>
+                  <div class="org-card-name">{m.nama}</div>
+                  <div class="org-card-pos">{m.jabatan}</div>
+                  {desc && <div class="org-card-desc">{desc}</div>}
+                </div>
+              )
+            })}
+          </div>
+          <div class="org-connector reveal"></div>
+        )}
+
+        {/* Row 3: Sekretaris & Bendahara */}
+        {G.strukturOrg && G.strukturOrg.length >= 6 && (
+           <div class="org-row">
+            {[G.strukturOrg[2], G.strukturOrg[3], G.strukturOrg[4], G.strukturOrg[5]].map((m, i) => {
+              const ext = getExtendedMemberData(m.nama);
+              const foto = m.foto || (ext ? ext.foto : "");
+              const desc = m.desc || (ext ? ext.desc : "");
+              return (
+                <div class="org-card reveal" tabindex="0" role="button" data-nama={m.nama} data-jabatan={m.jabatan} data-foto={foto} data-desc={desc} style={`--d: ${(i+3) * 0.15}s`}>
+                   <div class="avatar lg" style="margin-bottom: 8px;">
+                    {foto ? (
+                      <img src={foto} alt={m.nama} loading="lazy" />
+                    ) : (
+                      <span>{makeInitials(m.nama)}</span>
+                    )}
+                  </div>
+                  <div class="org-card-name">{m.nama}</div>
+                  <div class="org-card-pos">{m.jabatan}</div>
+                  {desc && <div class="org-card-desc">{desc}</div>}
+                </div>
+              )
+            })}
+          </div>
+          <div class="org-connector reveal"></div>
+        )}
+
+        {/* Row 4: Others */}
+        {G.strukturOrg && G.strukturOrg.length >= 8 && (
+          <div class="org-row">
+            {G.strukturOrg.slice(6).map((m, i) => {
+              const ext = getExtendedMemberData(m.nama);
+              const foto = m.foto || (ext ? ext.foto : "");
+              const desc = m.desc || (ext ? ext.desc : "");
+              return (
+                <div class="org-card reveal" tabindex="0" role="button" data-nama={m.nama} data-jabatan={m.jabatan} data-foto={foto} data-desc={desc} style={`--d: ${(i+7) * 0.15}s`}>
+                   <div class="avatar lg" style="margin-bottom: 8px;">
+                    {foto ? (
+                      <img src={foto} alt={m.nama} loading="lazy" />
+                    ) : (
+                      <span>{makeInitials(m.nama)}</span>
+                    )}
+                  </div>
+                  <div class="org-card-name">{m.nama}</div>
+                  <div class="org-card-pos">{m.jabatan}</div>
+                  {desc && <div class="org-card-desc">{desc}</div>}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Lightbox foto struktur -->
+    <div id="structure-photo-lightbox" class="foto-jendela" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Foto profil anggota">
+      <button id="structure-photo-lightbox-tutup" class="tutup-foto-jendela" aria-label="Tutup foto">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      <img id="structure-photo-lightbox-img" src="" alt="Foto profil anggota" class="foto-jendela-img" />
+    </div>
+  </main>
+
+  <Footer />
+
+  <script>
+    import '../scripts/struktur.js';
+  </script>
+</Layout>

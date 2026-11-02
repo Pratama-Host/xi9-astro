@@ -1,0 +1,9 @@
+node_modules/
+.astro/
+dist
+
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+.vercel
